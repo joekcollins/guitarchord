@@ -44,104 +44,67 @@ fret_maps = {
 
 # This function will initalize the dictionary containing chords
 # and their definitions. 
-def intialize_chord_dictionary():
+def initialize_chord_dictionary():
     semitones = ['A','A#','B', 'C','C#','D','D#','E','F','F#','G','G#']
     chord_formulas = {
         '': [0,4,7], # major triad
         'm': [0,3,7], # minor triad
         'dim': [0,3,6], # diminished triad
         'aug': [0,4,8], # augmented triad
-        'Maj7': [
-            [0,4,7,11], [0,7,11], [0,4,11]], # major 7th variations
-        'min7': [
-            [0,3,7,10], [0,7,10], [0,3,10]], # minor 7th variations
-        'dom7':[
-            [0,4,7,10], [0,4,10]], # dominant 7 variations
-        'min7b5': [
-            [0,3,6,10], [0,6,10]], # half diminished 7 variations (no dropping the fifth)
+        'Maj7': [[0,4,7,11], [0,7,11], [0,4,11]], # major 7th variations
+        'min7': [[0,3,7,10], [0,7,10], [0,3,10]], # minor 7th variations
+        'dom7':[[0,4,7,10], [0,4,10]], # dominant 7 variations
+        'min7b5': [[0,3,6,10], [0,6,10]], # half diminished 7 variations (no dropping the fifth)
         'dim7': [0,3,6,9], # fully diminished 7
-        'aug7': [
-            [0,4,8,11], [0,8,11]], # augmented 7 variations
-        'Maj7+9': [
-            [0,4,7,11,2], [0,4,11,2], [0,7,11,2]], # major 7 add 9 variations
-        'min7+9': [
-            [0,3,7,10,2], [0,3,10,2], [0,7,10,2]], # minor 7 add 9 variations
-        'dom7+9':[
-            [0,4,7,10,2], [0,4,10,2]], # dominant 7 add 9 variations
+        'aug7': [[0,4,8,11], [0,8,11]], # augmented 7 variations
+        'Maj7+9': [[0,4,7,11,2], [0,4,11,2], [0,7,11,2]], # major 7 add 9 variations
+        'min7+9': [[0,3,7,10,2], [0,3,10,2], [0,7,10,2]], # minor 7 add 9 variations
+        'dom7+9':[[0,4,7,10,2], [0,4,10,2]], # dominant 7 add 9 variations
         'Maj9': [0,4,7,2], # major 9
         'min9': [0,3,7,2], # minor 9
         'sus2': [0,2,7], # suspended 2
         'sus4': [0,5,7], # suspended 4
-        'Maj6': [
-            [0,4,7,9], [0,7,9], [0,4,9]], # major 6 variations
-        'min6': [
-            [0,3,7,8], [0,7,8], [0,3,8]], # minor 6 variations 
-        'Majmin6':[
-            [0,4,7,8], [0,4,8]], # major triad with minor 6 variations
-        'minMaj6':[
-            [0,3,7,9], [0,3,9]], # minor triad with major 6 variations
-        'Maj7b9':[
-            [0,4,7,11,1], [0,4,11,1], [0,7,11,1]], # major 7 flat 9 variations
-        'Maj7#9':[
-            [0,4,7,11,3], [0,4,11,3], [0,7,11,3]], # major 7 sharp 9 variations
-        'dom7b9':[
-            [0,4,7,10,1], [0,4,10,1], [0,7,10,1]], # dominant 7 flat 9 variations
-        'dom7#9':[
-            [0,4,7,10,3], [0,4,10,3], [0,7,10,3]], # dominant 7 sharp 9 variations
-        'maj11':[
-            [0,4,7,11,2,5], [0,4,11,2,5], [0,7,11,2,5], # major 7 add 9 add 11 variations
-            [0,4,11,5], [0,7,11,5], [0,4,7,2,5], [0,4,2,5]],
-        'maj7#11': [
-            [0,4,7,11,2,6], [0,4,7,11,6], [0,4,7,2,6], # maj 7 sharp 11 variations
-            [0,4,11,2,6], [0,4,11,6], [0,4,7,6], [0,4,6],
-            [0,7,11,2,6], [0,7,10,6], [0,7,6], [0,7,2,6]],
-        'maj7b9add11': [
-            [0,4,7,11,1,5], [0,4,11,1,5],[0,7,11,1,5]], # major 7 flat nine add 11 variations
-        'maj7b9#11': [
-            [0,4,7,11,1,6], [0,4,11,1,6], [0,7,11,1,6]], # major 7 flat 9 sharp 11 variations
-        'min11': [
-            [0,3,7,10,2,5], [0,3,7,10,5], [0,3,7,2,5], # minor 7 add 11 variations
-            [0,3,10,2,5], [0,3,10,5], [0,3,7,5], [0,3,5],
-            [0,7,10,2,5], [0,7,10,5]],
-        'min7b9add11': [
-            [0,3,7,10,1,5], [0,3,10,1,5], [0,7,10,1,5]], # minor 7 flat 9 add 11 variations
-        'min7#11':[
-            [0,3,7,10,2,6], [0,3,10,2,6], [0,3,10,6], # minor 7 add sharp 11 variations
-            [0,3,7,10,6], [0,3,10,6]],
-        'min7b9#11': [
-            [0,3,7,10,1,6], [0,3,10,1,6],[0,7,10,1,6]], # minor 7 flat 9 sharp 11 variations
-        'dom7add11':[
-            [0,4,7,10,2,5], [0,4,7,10,5], [0,4,10,2,5], [0,4,10,5]], # dominant 7 add 11 variations
-        'dom7#11':[
-            [0,4,7,10,2,6], [0,4,10,2,6], [0,4,10,6]], # dominant 7 sharp 11 variations
-        'dom7b9add11':[
-            [0,4,7,10,1,6], [0,4,10,1,6], [0,7,10,1,6]], # dominant 7 flat 9 add 11 variations
-        'dom7b9#11':[
-            [0,4,7,10,1,6], [0,4,10,1,6]], # dominant 7 flat 9 sharp 11 variations
-        'Maj13': [
-        [0,4,7,11,2,5,9],    # 1–3–5–maj7–9–11–13
-        [0,4,7,11,2,9],     # omit 11
-        [0,4,7,11,5,9]],      # omit 9
-        'Maj13b9': [
-            [0,4,7,11,1,5,9], [0,4,7,11,1,9]],  # flat9 variant
-        'Maj13#11': [
-            [0,4,7,11,2,6,9], [0,4,7,11,6,9]],  # sharp11 variant
-        'min13': [
-            [0,3,7,10,2,5,9],   # 1–♭3–5–♭7–9–11–13
-            [0,3,7,10,2,9],     # omit 11
-            [0,3,7,10,5,9]],      # omit 9
-        'min13b9': [
-            [0,3,7,10,1,5,9], [0,3,7,10,1,9]],
-        'min13#11': [
-            [0,3,7,10,2,6,9], [0,3,7,10,6,9]],
-        'dom13': [
-            [0,4,7,10,2,5,9],   # 1–3–5–♭7–9–11–13
-            [0,4,7,10,2,9],     # omit 11
-            [0,4,7,10,5,9]],      # omit 9
-        'dom13b9': [
-            [0,4,7,10,1,5,9], [0,4,7,10,1,9]],
-        'dom13#11': [
-            [0,4,7,10,2,6,9], [0,4,7,10,6,9]],
+        'Maj6': [[0,4,7,9], [0,7,9], [0,4,9]], # major 6 variations
+        'min6': [[0,3,7,8], [0,7,8], [0,3,8]], # minor 6 variations 
+        'Majmin6':[[0,4,7,8], [0,4,8]], # major triad with minor 6 variations
+        'minMaj6':[[0,3,7,9], [0,3,9]], # minor triad with major 6 variations
+        'Maj7b9':[[0,4,7,11,1], [0,4,11,1], [0,7,11,1]], # major 7 flat 9 variations
+        'Maj7#9':[[0,4,7,11,3], [0,4,11,3], [0,7,11,3]], # major 7 sharp 9 variations
+        'dom7b9':[[0,4,7,10,1], [0,4,10,1], [0,7,10,1]], # dominant 7 flat 9 variations
+        'dom7#9':[[0,4,7,10,3], [0,4,10,3], [0,7,10,3]], # dominant 7 sharp 9 variations
+        'maj11':[[0,4,7,11,2,5], [0,4,11,2,5], [0,7,11,2,5], # major 7 add 9 add 11 variations
+                 [0,4,11,5], [0,7,11,5], [0,4,7,2,5], [0,4,2,5]],
+        'maj7#11': [[0,4,7,11,2,6], [0,4,7,11,6], [0,4,7,2,6], # maj 7 sharp 11 variations
+                    [0,4,11,2,6], [0,4,11,6], [0,4,7,6], [0,4,6],
+                    [0,7,11,2,6], [0,7,10,6], [0,7,6], [0,7,2,6]],
+        'maj7b9add11': [[0,4,7,11,1,5], [0,4,11,1,5],[0,7,11,1,5]], # major 7 flat nine add 11 variations
+        'maj7b9#11': [[0,4,7,11,1,6], [0,4,11,1,6], [0,7,11,1,6]], # major 7 flat 9 sharp 11 variations
+        'min11': [[0,3,7,10,2,5], [0,3,7,10,5], [0,3,7,2,5], # minor 7 add 11 variations
+                  [0,3,10,2,5], [0,3,10,5], [0,3,7,5], [0,3,5],
+                  [0,7,10,2,5], [0,7,10,5]],
+        'min7b9add11': [[0,3,7,10,1,5], [0,3,10,1,5], [0,7,10,1,5]], # minor 7 flat 9 add 11 variations
+        'min7#11':[[0,3,7,10,2,6], [0,3,10,2,6], [0,3,10,6], # minor 7 add sharp 11 variations
+                   [0,3,7,10,6], [0,3,10,6]],
+        'min7b9#11': [[0,3,7,10,1,6], [0,3,10,1,6],[0,7,10,1,6]], # minor 7 flat 9 sharp 11 variations
+        'dom7add11':[[0,4,7,10,2,5], [0,4,7,10,5], [0,4,10,2,5], [0,4,10,5]], # dominant 7 add 11 variations
+        'dom7#11':[[0,4,7,10,2,6], [0,4,10,2,6], [0,4,10,6]], # dominant 7 sharp 11 variations
+        'dom7b9add11':[[0,4,7,10,1,6], [0,4,10,1,6], [0,7,10,1,6]], # dominant 7 flat 9 add 11 variations
+        'dom7b9#11':[[0,4,7,10,1,6], [0,4,10,1,6]], # dominant 7 flat 9 sharp 11 variations
+        'Maj13': [[0,4,7,11,2,5,9],    # 1–3–5–maj7–9–11–13
+                  [0,4,7,11,2,9],     # omit 11
+                  [0,4,7,11,5,9]],      # omit 9
+        'Maj13b9': [[0,4,7,11,1,5,9], [0,4,7,11,1,9]],  # flat9 variant
+        'Maj13#11': [[0,4,7,11,2,6,9], [0,4,7,11,6,9]],  # sharp11 variant
+        'min13': [[0,3,7,10,2,5,9],   # 1–♭3–5–♭7–9–11–13
+                  [0,3,7,10,2,9],     # omit 11
+                  [0,3,7,10,5,9]],      # omit 9
+        'min13b9': [[0,3,7,10,1,5,9], [0,3,7,10,1,9]],
+        'min13#11': [[0,3,7,10,2,6,9], [0,3,7,10,6,9]],
+        'dom13': [[0,4,7,10,2,5,9],   # 1–3–5–♭7–9–11–13
+                  [0,4,7,10,2,9],     # omit 11
+                  [0,4,7,10,5,9]],      # omit 9
+        'dom13b9': [[0,4,7,10,1,5,9], [0,4,7,10,1,9]],
+        'dom13#11': [[0,4,7,10,2,6,9], [0,4,7,10,6,9]],
         '7sus2':    [[0,2,7,10],    [0,2,10]],      # Dominant-7sus2
         '7sus4':    [[0,5,7,10],    [0,5,10]],      # Dominant-7sus4
         '9sus4':    [[0,5,7,10,2],  [0,5,10,2]],    # 9th with sus4
@@ -164,27 +127,20 @@ def intialize_chord_dictionary():
         '11#9':     [[0,4,7,10,3,2,5],  [0,4,7,10,3,5]],   # 11th sharp9
         '13b9':     [[0,4,7,10,1,2,5,9],[0,4,7,10,1,5,9]], # 13th flat9
         '13#9':     [[0,4,7,10,3,2,5,9],[0,4,7,10,3,5,9]], # 13th sharp9
-        '7alt': [
-            [0,4,6,10,1,3],   # 1-3-♭5-♭7-♭9-#9
-            [0,4,6,10,1],     # omit #9
-            [0,4,10,1,3]],     # omit ♭5
+        '7alt': [[0,4,6,10,1,3],   # 1-3-♭5-♭7-♭9-#9
+                 [0,4,6,10,1],     # omit #9
+                 [0,4,10,1,3]],     # omit ♭5
         'add9':     [[0,4,7,2]],      # triad + 9
         'add11':    [[0,4,7,5]],      # triad + 11
         'add13':    [[0,4,7,9]],      # triad + 13
-        'Maj6Maj7': [
-            [0, 4, 9, 11],   # full 1-3-6-7 voicing
-            [0, 9, 11],      # drop the 3rd
-            [0, 4, 11]],     # drop the 6th
-        '6maj7': [
-            [0, 4, 9, 11],
-            [0, 9, 11],
-            [0, 4, 11]],
-        'maj7add13': [
-            [0, 4, 7, 11, 9],  # 1-3-5-7-13
-            [0, 4, 11, 9],     # drop the 5th
-            [0, 7, 11, 9]],     # drop the 3rd
-        'Maj13no9no11': [
-            [0, 4, 7, 11, 9], [0, 4, 11, 9], [0, 7, 11, 9]],
+        'Maj6Maj7': [[0, 4, 9, 11],   # full 1-3-6-7 voicing
+                     [0, 9, 11],      # drop the 3rd
+                     [0, 4, 11]],     # drop the 6th
+        '6maj7': [[0, 4, 9, 11],[0, 9, 11],[0, 4, 11]],
+        'maj7add13': [[0, 4, 7, 11, 9],  # 1-3-5-7-13
+                      [0, 4, 11, 9],     # drop the 5th
+                      [0, 7, 11, 9]],     # drop the 3rd
+        'Maj13no9no11': [[0, 4, 7, 11, 9], [0, 4, 11, 9], [0, 7, 11, 9]],
         '5' : [[0,7]],  # power chord
 }
 
@@ -203,22 +159,22 @@ def intialize_chord_dictionary():
                 chord_names[chord_name] = [notes]
     return chord_names
 
-big_dictionary = intialize_chord_dictionary()
+big_dictionary = initialize_chord_dictionary()
 STRING_ORDER = ['E_high','B','G','D','A','E_low']
 
 
 def identify_chord(selected_notes, selections, chord_dict):
     sel_set = set(selected_notes)
-    if not selections:
+    if not selections: 
         return "No notes"
-    # find the *lowest* string they pressed:
-    root_string = max(selections.keys(),
-                      key=lambda s: STRING_ORDER.index(s))
-    root_note   = fret_maps[root_string][selections[root_string]]
-    # only try chords starting on that root:
+    root_string = max(selections.keys(), key=lambda s: STRING_ORDER.index(s))
+    bass_note = fret_maps[root_string][selections[root_string]]
     for name, voicings in chord_dict.items():
-        if not name.startswith(root_note):
-            continue
+        if name.startswith(bass_note):
+            for voicing in voicings:
+                if sel_set == set(voicing):
+                    return name
+    for name, voicings in chord_dict.items():
         for voicing in voicings:
             if sel_set == set(voicing):
                 return name
@@ -286,9 +242,9 @@ class FretboardGUI(tk.Tk):
             i = list(fret_maps.keys()).index(string_name)
             y = self.strings[i]
             x = self.frets[0] if fret == 0 else self.mids[fret-1]
-            self.canvas.create_oval(x-8, y-8, x+8, y+8,
-                                    fill="lightblue", tags="mark")
-
+            self.canvas.create_oval(x-8, y-8, x+8, y+8, fill="lightblue", tags="mark")
+            self.canvas.create_text(x, y, text=fret_maps[string_name][fret], tags="mark")
+            
     def _update_chord_label(self):
         notes = [fret_maps[s][f] for s,f in self.selections.items()]
         chord = identify_chord(notes, self.selections, self.chord_dict)
@@ -300,4 +256,3 @@ if __name__ == "__main__":
     gui = FretboardGUI(big_dictionary)
     gui.mainloop()
 
-print(big_dictionary)
