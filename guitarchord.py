@@ -180,7 +180,10 @@ def initialize_chord_dictionary():
                       [0, 4, 11, 9],     # drop the 5th
                       [0, 7, 11, 9]],     # drop the 3rd
         'Maj13no9no11': [[0, 4, 7, 11, 9], [0, 4, 11, 9], [0, 7, 11, 9]],
-        '5' : [[0,7]],  # power chord
+        '5' : [0,7],  # power chord
+        ' minor 2nd':[0,1], ' Major 2nd':[0,2], ' minor 3rd':[0,3], ' Major 3rd':[0,4], # Intervals
+        ' Perfect 4th':[0,5], ' Tritone':[0,6], ' minor 6th':[0,8], ' Major 6th':[0,9],
+        ' minor 7th':[0,10], ' Major 7th':[0,11]
 }
 
     chord_names = {} # empty dictionary for where chord names will go
@@ -238,7 +241,11 @@ class FretboardGUI(tk.Tk):
             False: list(fret_maps.keys()),
             True: list(fret_maps_drop_d.keys())
         }
-        self.toggle2 = tk.Checkbutton(self, text="Drop D", variable=self.drop_d, command=self._refresh_display)
+        self.toggle2 = tk.Checkbutton(
+            self, 
+            text="Drop D", 
+            variable=self.drop_d, 
+            command=self._refresh_display)
         self.toggle1.pack()
         self.toggle2.pack(pady=(0,10))
         self.chord_dict = chord_dict
@@ -286,8 +293,7 @@ class FretboardGUI(tk.Tk):
             x = self.frets[0] if fret == 0 else self.mids[fret-1]
             if abs(event.x - x) <= 8 and abs(event.y - y) <= 8:
                 del self.selections[string_name]
-                self._redraw_markers()
-                self._update_chord_label()
+                self._refresh_display()
                 return
         string_i = min(range(6), key=lambda i: abs(self.strings[i] - event.y))
         string_name = order[string_i]
@@ -302,8 +308,7 @@ class FretboardGUI(tk.Tk):
             del self.selections[string_name]
         else:
             self.selections[string_name] = fret_i
-        self._redraw_markers()
-        self._update_chord_label()
+        self._refresh_display()
 
     def _redraw_markers(self):
         m = self._current_map()
