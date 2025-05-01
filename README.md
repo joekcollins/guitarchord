@@ -45,7 +45,7 @@ Python 3.13.3
 No external libraries required 
 
 ##  🖥️  GUI
-The GUI for this project is mostly vibe-coded. In the future I'd like to get more familiar with tkinter. 
+The GUI for this project is made with some simple tkinter tools. The fret that the user clicks on is marked with a marker that displays the note of the fret, and that note is then sent into the chord identifier. This project is really testing my knowledge with tkinter, and I really need to get more familiar with it. In the future, once I'm happy with the amount of features the code has, I'll try to make the GUI a little nicer looking. I want to make the fretboard look like an actual fretboard, especially with inlays and a better representation for the nut.  
 
 ## 🤝 Contributing
 Feel free to fork this project, suggest features, or submit pull requests. Especially helpful would be:
