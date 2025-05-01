@@ -199,8 +199,7 @@ def initialize_chord_dictionary():
     return chord_names
 
 big_dictionary = initialize_chord_dictionary()
-STRING_ORDER = ['E_high','B','G','D','A','E_low']
-STRING_ORDER_DROP_D = ['E-high', 'B', 'G', 'D', 'A', 'D_low']
+
 
 
 def identify_chord(selected_notes, selections, chord_dict, string_order, current_map):
