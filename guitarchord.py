@@ -6,6 +6,13 @@ low_e_string = {
     6:'A#',7:'B',8:'C',9:"C#",10:'D',11:'D#',
     12:'E',13:'F',14:'F#',15:'G'
 }
+
+low_d_string = {
+    0:'D',1:'D#',2:'E',3:'F',4:'F#',5:'G',
+    6:'G#',7:'A',8:'A#',9:'B',10:'C',11:'C#',
+    12:'D',13:'D#',14:'E',15:'F'
+}
+
 a_string = {
     0: 'A', 1: 'A#', 2: 'B', 3: 'C', 4: 'C#', 5: 'D',
     6: 'D#', 7: 'E', 8: 'F', 9: 'F#', 10: 'G', 11: 'G#',
@@ -32,7 +39,7 @@ high_e_string = {
     12: 'E', 13: 'F', 14: 'F#', 15: 'G'
 }
 
-fret_maps = {
+fret_maps = {                   # Standard Tuning
     'E_high':   high_e_string,
     'B':        b_string,
     'G':        g_string,
@@ -40,6 +47,38 @@ fret_maps = {
     'A':        a_string,
     'E_low':    low_e_string
 }
+
+fret_maps_drop_d = {
+    'E_high':   high_e_string,
+    'B':        b_string,
+    'G':        g_string,
+    'D':        d_string,
+    'A':        a_string,
+    'D_low':    low_d_string
+}
+
+flat_conversion = {                
+        'C':'C', 'C#':'D♭', 'D':'D', 
+        'D#':'E♭', 'E':'E', 'F':'F',
+        'F#':'G♭', 'G':'G', 'G#':'A♭',
+        'A':'A', 'A#':'B♭', 'B':'B',
+        }
+
+def convert_notes_to_flat(notes): #this function replaces notes with their flat enharmonic equivalents
+    return [flat_conversion.get(note, note) for note in notes]
+
+def convert_chord_name_to_flats(chord_name):
+    if chord_name in ("No notes", "No Match"):
+        return chord_name
+    if len(chord_name) >= 2 and chord_name[1] == '#':
+        root_sharp = chord_name[:2]
+        suffix = chord_name[2:]
+    else:
+        root_sharp = chord_name[0]
+        suffix = chord_name[1:]
+    flat_root = flat_conversion.get(root_sharp, root_sharp)
+    return flat_root + suffix
+
 
 
 # This function will initalize the dictionary containing chords
@@ -184,6 +223,14 @@ class FretboardGUI(tk.Tk):
     def __init__(self, chord_dict):
         super().__init__()
         self.title("Guitar Chord Identifier")
+        self.use_flats = tk.BooleanVar(value=False)
+        self.toggle = tk.Checkbutton(
+            self,
+            text="Use Flats",
+            variable=self.use_flats,
+            command=self._refresh_display
+        )
+        self.toggle.pack(pady=(0,10))
         self.chord_dict = chord_dict
         self.canvas = tk.Canvas(self, width=800, height=240, bg='white')
         self.canvas.pack(padx=10, pady=10)
@@ -192,6 +239,10 @@ class FretboardGUI(tk.Tk):
         self.selections = {}
         self._draw_fretboard()
         self.canvas.bind("<Button-1>", self.on_click)
+
+    def _refresh_display(self):
+        self._redraw_markers()
+        self._update_chord_label()
 
     def _draw_fretboard(self):
         self.strings = []
@@ -242,14 +293,25 @@ class FretboardGUI(tk.Tk):
             i = list(fret_maps.keys()).index(string_name)
             y = self.strings[i]
             x = self.frets[0] if fret == 0 else self.mids[fret-1]
+            note = fret_maps[string_name][fret]
+            if self.use_flats.get():
+                note = flat_conversion.get(note, note)  
             self.canvas.create_oval(x-8, y-8, x+8, y+8, fill="lightblue", tags="mark")
-            self.canvas.create_text(x, y, text=fret_maps[string_name][fret], tags="mark")
+            self.canvas.create_text(x, y, text=note, tags="mark")
             
     def _update_chord_label(self):
         notes = [fret_maps[s][f] for s,f in self.selections.items()]
-        chord = identify_chord(notes, self.selections, self.chord_dict)
+        if self.use_flats.get():
+            display_notes = convert_notes_to_flat(notes)
+        else:
+            display_notes = notes
+        chord_sharp = identify_chord(notes, self.selections, self.chord_dict)
+        if self.use_flats.get():
+            chord_display = convert_chord_name_to_flats(chord_sharp)
+        else:
+            chord_display = chord_sharp
         self.info_label.config(
-            text=f"Notes: {sorted(notes)} → Chord: {chord}"
+            text=f"Notes: {sorted(display_notes)} → Chord: {chord_display}"
         )
 
 if __name__ == "__main__":

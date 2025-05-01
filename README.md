@@ -4,6 +4,7 @@ This Python project provides foundational data structures for mapping a guitar's
 ## 📁 Features
 Guitar Fretboard Mapping
 Each of the six strings (E, A, D, G, B, E) is represented with its notes from the open string up to the 15th fret.
+User can choose between displaying notes in Sharps or Flats
 
 ## Extensive Chord Dictionary
 Includes:
