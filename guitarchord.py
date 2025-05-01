@@ -200,14 +200,14 @@ def initialize_chord_dictionary():
 
 big_dictionary = initialize_chord_dictionary()
 STRING_ORDER = ['E_high','B','G','D','A','E_low']
+STRING_ORDER_DROP_D = ['E-high', 'B', 'G', 'D', 'A', 'D_low']
 
 
-def identify_chord(selected_notes, selections, chord_dict):
+def identify_chord(selected_notes, selections, chord_dict, string_order, current_map):
     sel_set = set(selected_notes)
-    if not selections: 
-        return "No notes"
-    root_string = max(selections.keys(), key=lambda s: STRING_ORDER.index(s))
-    bass_note = fret_maps[root_string][selections[root_string]]
+    if not selections: return "No notes"
+    root_string = max(selections.keys(), key=lambda s: string_order.index(s))
+    bass_note = current_map[root_string][selections[root_string]]
     for name, voicings in chord_dict.items():
         if name.startswith(bass_note):
             for voicing in voicings:
@@ -224,13 +224,24 @@ class FretboardGUI(tk.Tk):
         super().__init__()
         self.title("Guitar Chord Identifier")
         self.use_flats = tk.BooleanVar(value=False)
-        self.toggle = tk.Checkbutton(
+        self.drop_d = tk.BooleanVar(value=False)
+        self.toggle1 = tk.Checkbutton(
             self,
             text="Use Flats",
             variable=self.use_flats,
             command=self._refresh_display
         )
-        self.toggle.pack(pady=(0,10))
+        self.maps = {
+            False: fret_maps,
+            True: fret_maps_drop_d
+        }
+        self.orders = {
+            False: list(fret_maps.keys()),
+            True: list(fret_maps_drop_d.keys())
+        }
+        self.toggle2 = tk.Checkbutton(self, text="Drop D", variable=self.drop_d, command=self._refresh_display)
+        self.toggle1.pack()
+        self.toggle2.pack(pady=(0,10))
         self.chord_dict = chord_dict
         self.canvas = tk.Canvas(self, width=800, height=240, bg='white')
         self.canvas.pack(padx=10, pady=10)
@@ -239,6 +250,12 @@ class FretboardGUI(tk.Tk):
         self.selections = {}
         self._draw_fretboard()
         self.canvas.bind("<Button-1>", self.on_click)
+    
+    def _current_map(self):
+        return self.maps[self.drop_d.get()]
+    
+    def _current_order(self):
+        return self.orders[self.drop_d.get()]
 
     def _refresh_display(self):
         self._redraw_markers()
@@ -262,8 +279,10 @@ class FretboardGUI(tk.Tk):
         ]
 
     def on_click(self, event):
+        m = self._current_map()
+        order = list(m.keys())
         for string_name, fret in list(self.selections.items()):
-            i = list(fret_maps.keys()).index(string_name)
+            i = order.index(string_name)
             y = self.strings[i]
             x = self.frets[0] if fret == 0 else self.mids[fret-1]
             if abs(event.x - x) <= 8 and abs(event.y - y) <= 8:
@@ -271,8 +290,8 @@ class FretboardGUI(tk.Tk):
                 self._redraw_markers()
                 self._update_chord_label()
                 return
-        string_i    = min(range(6), key=lambda i: abs(self.strings[i] - event.y))
-        string_name = list(fret_maps.keys())[string_i]
+        string_i = min(range(6), key=lambda i: abs(self.strings[i] - event.y))
+        string_name = order[string_i]
         if event.x < self.mids[0]:
             fret_i = 0
         elif event.x > self.mids[-1]:
@@ -288,24 +307,28 @@ class FretboardGUI(tk.Tk):
         self._update_chord_label()
 
     def _redraw_markers(self):
+        m = self._current_map()
+        order = list(m.keys())
         self.canvas.delete("mark")
         for string_name, fret in self.selections.items():
-            i = list(fret_maps.keys()).index(string_name)
+            i = order.index(string_name)
             y = self.strings[i]
             x = self.frets[0] if fret == 0 else self.mids[fret-1]
-            note = fret_maps[string_name][fret]
+            note = m[string_name][fret]
             if self.use_flats.get():
                 note = flat_conversion.get(note, note)  
             self.canvas.create_oval(x-8, y-8, x+8, y+8, fill="lightblue", tags="mark")
             self.canvas.create_text(x, y, text=note, tags="mark")
             
     def _update_chord_label(self):
-        notes = [fret_maps[s][f] for s,f in self.selections.items()]
+        m = self._current_map()
+        order = self._current_order()
+        notes = [m[s][f] for s,f in self.selections.items()]
         if self.use_flats.get():
             display_notes = convert_notes_to_flat(notes)
         else:
             display_notes = notes
-        chord_sharp = identify_chord(notes, self.selections, self.chord_dict)
+        chord_sharp = identify_chord(notes, self.selections, self.chord_dict, order, m)
         if self.use_flats.get():
             chord_display = convert_chord_name_to_flats(chord_sharp)
         else:

@@ -2,9 +2,10 @@
 This Python project provides foundational data structures for mapping a guitar's fretboard and defining a wide variety of chord formulas. It's designed as a backend utility for music theory applications, guitar learning tools, and chord generation programs. The script is written using standard Python and includes chord variations ranging from simple triads to complex jazz extensions.
 
 ## 📁 Features
-Guitar Fretboard Mapping
-Each of the six strings (E, A, D, G, B, E) is represented with its notes from the open string up to the 15th fret.
-User can choose between displaying notes in Sharps or Flats
+Guitar Fretboard Mapping  
+Each of the six strings (E, A, D, G, B, E) is represented with its notes from the open string up to the 15th fret.  
+User can choose between displaying notes in Sharps or Flats  
+User can select Drop D setting (more tunings coming soon!)  
 
 ## Extensive Chord Dictionary
 Includes:
